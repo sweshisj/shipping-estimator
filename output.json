@@ -90,5 +90,114 @@
       "Weight": 1
     },
     "Output": null
+  },
+  {
+    "Input": {
+      "From": "2000",
+      "To": "5000",
+      "Weight": 3
+    },
+    "Output": [
+      {
+        "RateID": "SYD-ADL-5kg",
+        "Price": 8
+      }
+    ]
+  },
+  {
+    "Input": {
+      "From": "2001",
+      "To": "5001",
+      "Weight": 6
+    },
+    "Output": null
+  },
+  {
+    "Input": {
+      "From": "5000",
+      "To": "6000",
+      "Weight": 8
+    },
+    "Output": [
+      {
+        "RateID": "ADL-PER-10kg",
+        "Price": 15.75
+      }
+    ]
+  },
+  {
+    "Input": {
+      "From": "5001",
+      "To": "6001",
+      "Weight": 12
+    },
+    "Output": null
+  },
+  {
+    "Input": {
+      "From": "3000",
+      "To": "6000",
+      "Weight": 4
+    },
+    "Output": [
+      {
+        "RateID": "MEL-PER-15kg",
+        "Price": 22
+      },
+      {
+        "RateID": "MEL-PER-5kg",
+        "Price": 10.5
+      }
+    ]
+  },
+  {
+    "Input": {
+      "From": "3002",
+      "To": "6001",
+      "Weight": 14
+    },
+    "Output": [
+      {
+        "RateID": "MEL-PER-15kg",
+        "Price": 22
+      }
+    ]
+  },
+  {
+    "Input": {
+      "From": "3000",
+      "To": "6000",
+      "Weight": 6
+    },
+    "Output": [
+      {
+        "RateID": "MEL-PER-15kg",
+        "Price": 22
+      }
+    ]
+  },
+  {
+    "Input": {
+      "From": "5000",
+      "To": "3000",
+      "Weight": 1
+    },
+    "Output": null
+  },
+  {
+    "Input": {
+      "From": "2000",
+      "To": "6000",
+      "Weight": 5
+    },
+    "Output": null
+  },
+  {
+    "Input": {
+      "From": "6000",
+      "To": "2000",
+      "Weight": 5
+    },
+    "Output": null
   }
 ]

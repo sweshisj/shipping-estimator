@@ -29,6 +29,26 @@
     }
   },
   {
+    "Event": "ZoneDefined",
+    "Data": {
+      "Name": "ADL",
+      "Postcodes": [
+        "5000",
+        "5001"
+      ]
+    }
+  },
+  {
+    "Event": "ZoneDefined",
+    "Data": {
+      "Name": "PER",
+      "Postcodes": [
+        "6000",
+        "6001"
+      ]
+    }
+  },
+  {
     "Event": "RateDefined",
     "Data": {
       "ID": "MEL-SYD-2kg",
@@ -56,6 +76,46 @@
       "Cost": 3.55,
       "FromZone": "MEL",
       "ToZone": "BRI"
+    }
+  },
+  {
+    "Event": "RateDefined",
+    "Data": {
+      "ID": "SYD-ADL-5kg",
+      "MaxWeight": 5,
+      "Cost": 8.00,
+      "FromZone": "SYD",
+      "ToZone": "ADL"
+    }
+  },
+  {
+    "Event": "RateDefined",
+    "Data": {
+      "ID": "ADL-PER-10kg",
+      "MaxWeight": 10,
+      "Cost": 15.75,
+      "FromZone": "ADL",
+      "ToZone": "PER"
+    }
+  },
+  {
+    "Event": "RateDefined",
+    "Data": {
+      "ID": "MEL-PER-15kg",
+      "MaxWeight": 15,
+      "Cost": 22.00,
+      "FromZone": "MEL",
+      "ToZone": "PER"
+    }
+  },
+  {
+    "Event": "RateDefined",
+    "Data": {
+      "ID": "MEL-PER-5kg",
+      "MaxWeight": 5,
+      "Cost": 10.50,
+      "FromZone": "MEL",
+      "ToZone": "PER"
     }
   }
 ]
