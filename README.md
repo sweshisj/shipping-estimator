@@ -1,6 +1,7 @@
 # Freight Cost Calculator
----
+
 This repository contains a Go program designed to calculate freight shipping costs based on defined geographical zones and rates. It processes a stream of events to establish the pricing rules and then provides cost estimates for various shipments.
+
 ---
 
 ## Problem Overview
