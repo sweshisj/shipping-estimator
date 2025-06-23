@@ -9,7 +9,9 @@ This repository contains a Go program designed to calculate freight shipping cos
 A warehouse needs to estimate shipping costs for freight to different locations. The costs are determined by a set of rules (rates) that depend on:
 
   -The shipment's weight.
+  
   -The origin and destination postal codes, which map to predefined zones.
+  
   -The program's goal is to calculate and list all possible prices for a given shipment, considering all applicable rates.
 
 ---
@@ -17,12 +19,19 @@ A warehouse needs to estimate shipping costs for freight to different locations.
 ## Requirements Fulfilled
 
 This solution addresses the following core requirements:
+
   -Input Handling: Accepts shipment details (weight, from postcode, to postcode).
+  
   -Rate Calculation: Calculates all possible prices for the given input based on defined rates.
+  
   -Zone Mapping: Correctly maps postcodes to their respective zones.
+  
   -Event Processing: Processes a stream of ZoneDefined and RateDefined events to build an in-memory representation of zones and rates.
+  
   -Output Generation: Prints all possible prices to the console and writes a structured JSON output file (output.json) detailing the input request and its corresponding applicable rates.
+  
   -Standard Go Tooling: Developed using standard Golang features and practices.
+  
   -Test Data Usage: Utilizes provided testdata for events and inputs.
 
 ---
@@ -70,8 +79,11 @@ A file named output.json will be generated in the root of the project directory.
 I spent approximately 2.5 hours working on this problem. This time was distributed as follows:
 
   -0.5 hours: Understanding the problem, reading documentation, and setting up the Go module.
+  
   -1 hour: Defining data structures (structs), implementing JSON unmarshaling for events and inputs, and basic event processing.
+  
   -0.5 hours: Implementing the core pricing logic (calculatePrices function) and zone lookup.
+  
   -0.5 hours: Modifying the main function for reading from input.json, writing to output.json, and refining console output.
 
 ---
