@@ -1,0 +1,40 @@
+{
+  "Input": {
+    "From": "3000",
+    "To": "2001",
+    "Weight": 1
+  },
+  "Output": [
+    {
+      "RateID": "MEL-SYD-2kg",
+      "Price": 2.5
+    },
+    {
+      "RateID": "MEL-SYD-7kg",
+      "Price": 5
+    }
+  ]
+}
+
+{
+  "Input": {
+    "From": "3000",
+    "To": "4000",
+    "Weight": 2
+  },
+  "Output": [
+    {
+      "RateID": "MEL-BRI-4kg",
+      "Price": 3.55
+    }
+  ]
+}
+
+{
+  "Input": {
+    "From": "4000",
+    "To": "3000",
+    "Weight": 2
+  },
+  "Output": []
+}
