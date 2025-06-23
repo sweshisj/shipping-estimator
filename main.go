@@ -24,6 +24,18 @@ type RateDefinedData struct {
 	ToZone    string  `json:"ToZone"`
 }
 
+// input-output.json
+type InputRequest struct {
+	From   string  `json:"From"`
+	To     string  `json:"To"`
+	Weight float64 `json:"Weight"`
+}
+
+type PossiblePrice struct {
+	RateID string  `json:"RateID"`
+	Price  float64 `json:"Price"`
+}
+
 func main() {
 	fmt.Println("Hello, Flip!")
 }
