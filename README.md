@@ -1,5 +1,5 @@
 # Freight Cost Calculator
-
+---
 This repository contains a Go program designed to calculate freight shipping costs based on defined geographical zones and rates. It processes a stream of events to establish the pricing rules and then provides cost estimates for various shipments.
 ---
 
@@ -59,8 +59,8 @@ go run main.go
 ## Input and Output
 
   -Input: The program reads shipment requests from testdata/input.json. This file is an array of JSON objects, each specifying From postcode, To postcode, and Weight.
-  -Output:
-The program will print a summary of processed requests and their applicable rates to the console.
+  
+  -Output: The program will print a summary of processed requests and their applicable rates to the console.
 A file named output.json will be generated in the root of the project directory. This file will contain a structured JSON array, where each element represents an input request along with an array of all PossiblePrice objects found for that request.
 
 ---
