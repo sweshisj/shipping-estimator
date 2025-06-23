@@ -64,13 +64,48 @@ type ApplicationState struct {
 }
 
 func loadEvents(filename string) (*ApplicationState, error) {
-	_, err := os.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("error reading events file: %w", err)
-	} else {
-		fmt.Println("Events file read successfully")
-		return nil, nil
 	}
+
+	var events []Event
+	err = json.Unmarshal(data, &events)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshaling events JSON: %w", err)
+	}
+
+	appState := &ApplicationState{
+		Zones: make(map[string]Zone),
+		Rates: []Rate{},
+	}
+
+	for _, event := range events {
+		switch event.EventType {
+		case "ZoneDefined":
+			var zoneData ZoneDefinedData
+			if err := json.Unmarshal(event.Data, &zoneData); err != nil {
+				return nil, fmt.Errorf("error unmarshaling ZoneDefinedData: %w", err)
+			}
+			postcodeMap := make(map[string]struct{})
+			for _, postcode := range zoneData.Postcodes {
+				postcodeMap[postcode] = struct{}{}
+			}
+			appState.Zones[zoneData.Name] = Zone{
+				Name:      zoneData.Name,
+				Postcodes: postcodeMap,
+			}
+		case "RateDefined":
+			var rateData RateDefinedData
+			if err := json.Unmarshal(event.Data, &rateData); err != nil {
+				return nil, fmt.Errorf("error unmarshaling RateDefinedData: %w", err)
+			}
+			appState.Rates = append(appState.Rates, Rate(rateData))
+		default:
+			fmt.Printf("Warning: Unknown event type encountered: %s\n", event.EventType)
+		}
+	}
+	return appState, nil
 }
 
 func main() {
@@ -78,8 +113,6 @@ func main() {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to load events: %v\n", err)
 		os.Exit(1)
-	} else {
-		fmt.Println("Application started successfully")
 	}
 
 	// Load input-output.json
