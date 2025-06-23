@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 )
 
 // events.json
@@ -36,6 +37,40 @@ type PossiblePrice struct {
 	Price  float64 `json:"Price"`
 }
 
+// internal data structures
+type Zone struct {
+	Name      string
+	Postcodes map[string]struct{} // Using a map for O(1) postcode lookup
+}
+
+type Rate struct {
+	ID        string
+	MaxWeight float64
+	Cost      float64
+	FromZone  string
+	ToZone    string
+}
+
+type ApplicationState struct {
+	Zones map[string]Zone
+	Rates []Rate
+}
+
+func loadEvents(filename string) (*ApplicationState, error) {
+	_, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("error reading events file: %w", err)
+	} else {
+		fmt.Println("Events file read successfully")
+		return nil, nil
+	}
+}
 func main() {
-	fmt.Println("Hello, Flip!")
+	_, err := loadEvents("testdata/events.json")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to load events: %v\n", err)
+		os.Exit(1)
+	} else {
+		fmt.Println("Application started successfully")
+	}
 }
