@@ -17,7 +17,6 @@ A warehouse needs to estimate shipping costs for freight to different locations.
 ## Requirements Fulfilled
 
 This solution addresses the following core requirements:
-
   -Input Handling: Accepts shipment details (weight, from postcode, to postcode).
   -Rate Calculation: Calculates all possible prices for the given input based on defined rates.
   -Zone Mapping: Correctly maps postcodes to their respective zones.
@@ -70,10 +69,10 @@ A file named output.json will be generated in the root of the project directory.
 
 I spent approximately 2.5 hours working on this problem. This time was distributed as follows:
 
-0.5 hours: Understanding the problem, reading documentation, and setting up the Go module.
-1 hour: Defining data structures (structs), implementing JSON unmarshaling for events and inputs, and basic event processing.
-0.5 hours: Implementing the core pricing logic (calculatePrices function) and zone lookup.
-0.5 hours: Modifying the main function for reading from input.json, writing to output.json, and refining console output.
+  -0.5 hours: Understanding the problem, reading documentation, and setting up the Go module.
+  -1 hour: Defining data structures (structs), implementing JSON unmarshaling for events and inputs, and basic event processing.
+  -0.5 hours: Implementing the core pricing logic (calculatePrices function) and zone lookup.
+  -0.5 hours: Modifying the main function for reading from input.json, writing to output.json, and refining console output.
 
 ---
 
