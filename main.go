@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
+	"strings"
 )
 
 // events.json
@@ -37,6 +39,11 @@ type PossiblePrice struct {
 	Price  float64 `json:"Price"`
 }
 
+type InputOutputPair struct {
+	Input  InputRequest    `json:"Input"`
+	Output []PossiblePrice `json:"Output"`
+}
+
 // internal data structures
 type Zone struct {
 	Name      string
@@ -65,6 +72,7 @@ func loadEvents(filename string) (*ApplicationState, error) {
 		return nil, nil
 	}
 }
+
 func main() {
 	_, err := loadEvents("testdata/events.json")
 	if err != nil {
@@ -72,5 +80,30 @@ func main() {
 		os.Exit(1)
 	} else {
 		fmt.Println("Application started successfully")
+	}
+
+	// Load input-output.json
+	inputOutputBytes, err := os.ReadFile("testdata/input-output.json")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to read input-output file: %v\n", err)
+		os.Exit(1)
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(string(inputOutputBytes)))
+
+	var inputOutputs []InputOutputPair
+	for {
+		var pair InputOutputPair
+		err := decoder.Decode(&pair)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error decoding input-output pair: %v\n", err)
+			os.Exit(1)
+		}
+		inputOutputs = append(inputOutputs, pair)
+		fmt.Printf("Input: %+v\n", pair.Input)
+		fmt.Printf("Output: %+v\n", pair.Output)
 	}
 }
