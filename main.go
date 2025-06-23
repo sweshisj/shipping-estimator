@@ -3,15 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
-	"strings"
 )
 
 // events.json
 type Event struct {
 	EventType string          `json:"Event"`
-	Data      json.RawMessage `json:"Data"` // Use RawMessage to unmarshal later based on EventType
+	Data      json.RawMessage `json:"Data"`
 }
 
 type ZoneDefinedData struct {
@@ -37,6 +35,11 @@ type InputRequest struct {
 type PossiblePrice struct {
 	RateID string  `json:"RateID"`
 	Price  float64 `json:"Price"`
+}
+
+type CalculatedResult struct {
+	Input  InputRequest    `json:"Input"`
+	Output []PossiblePrice `json:"Output"`
 }
 
 type InputOutputPair struct {
@@ -108,35 +111,100 @@ func loadEvents(filename string) (*ApplicationState, error) {
 	return appState, nil
 }
 
+func calculatePrices(req InputRequest, appState *ApplicationState) []PossiblePrice {
+	var applicablePrices []PossiblePrice
+
+	// 1. Find the zones for the given postcodes
+	var fromZoneName, toZoneName string
+	for _, zone := range appState.Zones {
+		if _, ok := zone.Postcodes[req.From]; ok {
+			fromZoneName = zone.Name
+		}
+		if _, ok := zone.Postcodes[req.To]; ok {
+			toZoneName = zone.Name
+		}
+	}
+
+	// If either postcode doesn't belong to a defined zone, no rates can apply
+	if fromZoneName == "" || toZoneName == "" {
+		return applicablePrices
+	}
+
+	// 2. Filter rates
+	for _, rate := range appState.Rates {
+		// Check weight
+		if req.Weight > rate.MaxWeight {
+			continue
+		}
+
+		// Check fromZone and toZone
+		if rate.FromZone == fromZoneName && rate.ToZone == toZoneName {
+			applicablePrices = append(applicablePrices, PossiblePrice{
+				RateID: rate.ID,
+				Price:  rate.Cost,
+			})
+		}
+	}
+
+	return applicablePrices
+}
+
 func main() {
-	_, err := loadEvents("testdata/events.json")
+	appState, err := loadEvents("testdata/events.json")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to load events: %v\n", err)
 		os.Exit(1)
 	}
 
-	// Load input-output.json
-	inputOutputBytes, err := os.ReadFile("testdata/input-output.json")
+	inputRequestsBytes, err := os.ReadFile("testdata/input.json")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to read input-output file: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Failed to read input.json: %v\n", err)
 		os.Exit(1)
 	}
 
-	decoder := json.NewDecoder(strings.NewReader(string(inputOutputBytes)))
-
-	var inputOutputs []InputOutputPair
-	for {
-		var pair InputOutputPair
-		err := decoder.Decode(&pair)
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error decoding input-output pair: %v\n", err)
-			os.Exit(1)
-		}
-		inputOutputs = append(inputOutputs, pair)
-		fmt.Printf("Input: %+v\n", pair.Input)
-		fmt.Printf("Output: %+v\n", pair.Output)
+	var inputRequests []InputRequest
+	err = json.Unmarshal(inputRequestsBytes, &inputRequests)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error unmarshaling input.json: %v\n", err)
+		os.Exit(1)
 	}
+
+	var allCalculatedResults []CalculatedResult
+
+	for i, req := range inputRequests {
+		fmt.Printf("Processing Request %d: From %s, To %s, Weight %.2fkg\n",
+			i+1, req.From, req.To, req.Weight)
+
+		possiblePrices := calculatePrices(req, appState)
+
+		allCalculatedResults = append(allCalculatedResults, CalculatedResult{
+			Input:  req,
+			Output: possiblePrices,
+		})
+
+		if len(possiblePrices) > 0 {
+			fmt.Println("  Possible Rates:")
+			for _, price := range possiblePrices {
+				fmt.Printf("    - RateID: %s, Price: %.2f\n", price.RateID, price.Price)
+			}
+		} else {
+			fmt.Println("  No applicable rates found.")
+		}
+		fmt.Println()
+	}
+
+	// Write all calculated results to output.json
+	outputJSON, err := json.MarshalIndent(allCalculatedResults, "", "  ")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error marshaling output to JSON: %v\n", err)
+		os.Exit(1)
+	}
+
+	err = os.WriteFile("output.json", outputJSON, 0644)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing output.json: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Calculations complete. Results written to output.json")
 }
